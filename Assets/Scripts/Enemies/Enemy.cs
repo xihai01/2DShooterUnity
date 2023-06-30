@@ -9,7 +9,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("Settings")]
     [Tooltip("The speed at which the enemy moves.")]
-    public float moveSpeed = 5.0f;
+    public float moveSpeed = 15.0f;
     [Tooltip("The score value for defeating this enemy")]
     public int scoreValue = 5;
 

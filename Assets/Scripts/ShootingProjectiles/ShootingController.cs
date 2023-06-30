@@ -36,6 +36,9 @@ public class ShootingController : MonoBehaviour
     //The input manager which manages player input
     private InputManager inputManager = null;
 
+    //The player
+    private GameObject player = null;
+
     /// <summary>
     /// Description:
     /// Standard unity function that runs every frame
@@ -83,6 +86,9 @@ public class ShootingController : MonoBehaviour
                 Debug.LogError("Player Shooting Controller can not find an InputManager in the scene, there needs to be one in the " +
                     "scene for it to run");
             }
+        } else
+        {
+            player = GameObject.FindWithTag("Player");
         }
     }
 
@@ -118,12 +124,24 @@ public class ShootingController : MonoBehaviour
         // If the cooldown is over fire a projectile
         if ((Time.timeSinceLevelLoad - lastFired) > fireRate)
         {
-            // Launches a projectile
-            SpawnProjectile();
-
-            if (fireEffect != null)
+            // Launches a projectile - if it's an enemy firing, make sure they are within range
+            if (!isPlayerControlled)
             {
-                Instantiate(fireEffect, transform.position, transform.rotation, null);
+                if ((transform.position - player.transform.position).sqrMagnitude < 200)
+                {
+                    SpawnProjectile();
+                    if (fireEffect != null)
+                    {
+                        Instantiate(fireEffect, transform.position, transform.rotation, null);
+                    }
+                }
+            } else
+            {
+                SpawnProjectile();
+                if (fireEffect != null)
+                {
+                    Instantiate(fireEffect, transform.position, transform.rotation, null);
+                }
             }
 
             // Restart the cooldown
