@@ -89,11 +89,16 @@ public class Damage : MonoBehaviour
     private void DealDamage(GameObject collisionGameObject)
     {
         Health collidedHealth = collisionGameObject.GetComponent<Health>();
+        string playerTag = collisionGameObject.tag;
         if (collidedHealth != null)
         {
             if (collidedHealth.teamId != this.teamId)
             {
                 collidedHealth.TakeDamage(damageAmount);
+                if (playerTag == "Player")
+                {
+                    collidedHealth.UpdateHealthBar(collidedHealth.currentHealth);
+                }
                 if (hitEffect != null)
                 {
                     Instantiate(hitEffect, transform.position, transform.rotation, null);

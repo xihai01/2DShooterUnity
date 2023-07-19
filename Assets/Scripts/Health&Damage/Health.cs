@@ -15,6 +15,8 @@ public class Health : MonoBehaviour
     public int teamId = 0;
 
     [Header("Health Settings")]
+    [Tooltip("The healthbar")]
+    public HealthBar healthBar;
     [Tooltip("The default health value")]
     public int defaultHealth = 1;
     [Tooltip("The maximum health value")]
@@ -136,8 +138,14 @@ public class Health : MonoBehaviour
             timeToBecomeDamagableAgain = Time.time + invincibilityTime;
             isInvincableFromDamage = true;
             currentHealth -= damageAmount;
+            //healthBar.UpdateHealthBar(currentHealth, maximumHealth);
             CheckDeath();
         }
+    }
+
+    public void UpdateHealthBar(int currHealth)
+    {
+        healthBar.SetHealth(currHealth);
     }
 
     /// <summary>
