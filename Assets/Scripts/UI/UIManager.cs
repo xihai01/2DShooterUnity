@@ -184,6 +184,10 @@ public class UIManager : MonoBehaviour
         SetUpEventSystem();
         SetUpUIElements();
         UpdateUI();
+        //pause game initially to render instructions
+        GoToPage(0);
+        Time.timeScale = 0;
+        isPaused = true;
     }
 
     /// <summary>

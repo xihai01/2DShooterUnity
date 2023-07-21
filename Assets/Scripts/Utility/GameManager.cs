@@ -39,6 +39,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public static int fuelScore
+    {
+        get
+        {
+            return instance.fuelCollected;
+        }
+
+        set
+        {
+            instance.fuelCollected = value;
+        }
+    }
+
     // The highest score obtained by this player
     [Tooltip("The highest score acheived on this device")]
     public int highScore = 0;
@@ -51,6 +64,9 @@ public class GameManager : MonoBehaviour
     
     // The number of enemies defeated in game
     private int enemiesDefeated = 0;
+
+    // The number of fuel pellets to collect
+    private int fuelCollected = 0;
 
     [Tooltip("Whether or not to print debug statements about whether the game can be won or not according to the game manager's" +
         " search at start up")]
@@ -197,6 +213,23 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Description:
+    /// Increments the number of fuel pellets collected by 1
+    /// Input:
+    /// none
+    /// Return:
+    /// void (no returned value)
+    /// </summary>
+    public void IncrementFuelCollected()
+    {
+        fuelCollected++;
+        if (fuelCollected >= 20 && gameIsWinnable)
+        {
+            LevelCleared();
+        }
+    }
+
+    /// <summary>
+    /// Description:
     /// Standard Unity function that gets called when the application (or playmode) ends
     /// Input:
     /// none
@@ -227,7 +260,22 @@ public class GameManager : MonoBehaviour
         }
         UpdateUIElements();
     }
-    
+
+    /// <summary>
+    /// Description:
+    /// Adds a number to the player's number of fuel collected
+    /// Input: 
+    /// int scoreAmount
+    /// Returns: 
+    /// void (no return)
+    /// </summary>
+    /// <param name="scoreAmount">The amount to add to the score</param>
+    public static void AddToFuelScore(int scoreAmount)
+    {
+        fuelScore += scoreAmount;
+        UpdateUIElements();
+    }
+
     /// <summary>
     /// Description:
     /// Resets the current player score
@@ -296,7 +344,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>
     /// Description:
-    /// Ends the level, meant to be called when the level is complete (enough enemies have been defeated)
+    /// Ends the level, meant to be called when the level is complete (enough enemies have been defeated or required # of fuel is collected)
     /// Inputs: 
     /// none
     /// Returns: 
@@ -309,6 +357,7 @@ public class GameManager : MonoBehaviour
         {
             player.SetActive(false);
             uiManager.allowPause = false;
+            // todo: navigate to briefing page
             uiManager.GoToPage(gameVictoryPageIndex);
             if (victoryEffect != null)
             {
